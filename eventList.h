@@ -1,5 +1,7 @@
 #define _EventList_h
 
+// A class for keeping track of events in a player's timeline
+// Would be better implemented as a linked list, but the size of arrays used for this program means this is an ok solution
 class EventList
 {
   public:
@@ -8,6 +10,7 @@ class EventList
     bool addEvent(int event);
     bool removeEvent(int event);
     int getSize();
+    void getNeighbours(int event, int neighbours[]);
   private:
     int events[];
     int currentPos;
@@ -20,12 +23,14 @@ EventList::EventList(int listSize){
   maxSize = listSize;
 }
 
+// Initialises all events to -1
 void EventList::initEvents(){
   for (int i = 0; i < maxSize; i++){
     events[i] = -1;
   }
 }
 
+// Adds an event into the right place in the array to keep order
 bool EventList::addEvent(int event){
   if (currentPos < maxSize-1){
     int pos = 0;
@@ -42,6 +47,7 @@ bool EventList::addEvent(int event){
   return false;
 }
 
+// Removes an event from the array
 bool EventList::removeEvent(int event){
   for (int i = 0; i < currentPos; i++){
     if (events[i] == event){
@@ -58,4 +64,28 @@ bool EventList::removeEvent(int event){
 
 int EventList::getSize(){
   return currentPos;
+}
+
+// Gets the neighbours either side of the event
+void EventList::getNeighbours(int event, int neighbours[]){
+  if (currentPos == 1){
+    neighbours[0] = events[0];
+    neighbours[1] = events[1];
+  }
+  else{
+    for (int i = 0; i < currentPos; i++){
+      if (event < events[i] && i == 0){
+        neighbours[0] = events[i];
+        neighbours[1] = events[i];
+      }
+      else if (i == currentPos - 1){
+        neighbours[0] = events[i];
+        neighbours[1] = events[i];
+      }
+      else if (event < events[i]){
+        neighbours[0] = events[i-1];
+        neighbours[1] = events[i];
+      }
+    }
+  }
 }

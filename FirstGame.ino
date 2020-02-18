@@ -8,6 +8,7 @@
 
 // Code that can be removed at a later date
 // ------------------------------------------
+// TODO this needs to be the number of lines in the read in text file
 const int EVENTS = 4;
 
 char* question1 = "In this year, Charles I became the second Stuart King, after the death of his father James I";
@@ -16,6 +17,7 @@ char* question3 = "Charles I needed money before he could fight with France and 
 char* question4 = "Five members of the nobility took the king to court over their imprisonment for refusing to pay the Forced Loan, but the king won";
 
 const char* QUESTIONS[EVENTS] = {question1, question2, question3, question4};
+const int YEARS[EVENTS] = {1625, 1626, 1627, 1627};
 // ------------------------------------------
 
 // Id of the device, 0 = MASTER, 1 = SLAVE
@@ -54,6 +56,18 @@ void alertMaster(){
   return;
 }
 
+bool isNearby(int event, int neighbours[]){
+  if (event == neighbours[0] || event == neighbours[1]) return true;
+  else if (YEARS[event] == YEARS[neighbours[0]] || YEARS[event] == YEARS[neighbours[1]]) return true;
+  else return false;
+}
+
+char buttonToPress(int event, int nearbyEvent){
+  if (YEARS[event] < YEARS[nearbyEvent]) return 'a';
+  else if (YEARS[event] > YEARS[nearbyEvent]) return 'c';
+  else if (YEARS[event] == YEARS[nearbyEvent]) return 'b';
+}
+
 void setup() {
   M5.begin();
   M5.Lcd.fillScreen(BLACK);
@@ -67,10 +81,12 @@ void loop() {
   if (loopCount == 0){
     // Ask user to scan first event
     initialDisplay();
-    eventList.addEvent(waitForEvent());
+    int event = waitForEvent();
+    eventList.addEvent(event);
     
     // Display which event they chose
-    displayEvent(QUESTIONS[0]);
+    displayEvent(QUESTIONS[event]);
+    waitOnButton('b');
   }
   else{
     // Check if anyone has won the game, if they have, end the game (only do this if master device)
@@ -87,19 +103,43 @@ void loop() {
 
     // Wait for new event
     int event = waitForEvent();
-    askQuestion(QUESTIONS[event]);
-    bool correct = buttonC();
-    if (correct) displayCorrect();
-    else displayIncorrect();
+    displayEvent(QUESTIONS[event]);
+    waitOnButton('b');
 
-    // TODO
     // When a new event is detected, ask the player to select an event closest to the new event
-    // The user must then input whether the new event is before or after the chosen close event
+    askNearbyEvent();
+    int nearbyEvent = waitForEvent();
+    int neighbours[2];
+    eventList.getNeighbours(event, neighbours);
+    bool valid = isNearby(nearbyEvent, neighbours);
 
-    // If correct, add event to events list
-    // If incorrect, play a minigame
-    //    If minigame succeeds, add event to list
-    //    If minigame fails, change event associated with tag
+    if (valid){
+      // The user must then input whether the new event is before or after the chosen close event
+      char correctButton = buttonToPress(event, nearbyEvent);
+      bool correct = false;
+      if (correctButton == 'b') correct = anyButton();
+      else correct = mustPressButton(correctButton);
+
+      // If correct, add event to events list
+      if (correct){
+        eventList.addEvent(event);
+        displayCorrect();
+        delay(2000);
+      }
+      // If incorrect, play a minigame
+      else{
+        displayIncorrect();
+        delay(2000);
+        // If minigame succeeds, add event to list
+        // If minigame fails, change event associated with tag
+      }
+    }
+    else{
+      // Tell the user the event they chose was not close enough to the new event
+      notClose();
+      waitOnButton('b');
+    }
+    
     // With a random probability, choose a new order for the list (only do this if master device)
     //    Wait for all events in the list to be scanned through in the new order
     //    Events that are scanned through wrong now change and are no longer part of the event list

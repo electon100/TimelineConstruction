@@ -4,18 +4,24 @@ void initialDisplay(){
   M5.Lcd.printf("Add the first event to your timeline by pressing the middle button...");
 }
 
-void askQuestion(const char* question){
+void askNearbyEvent(){
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setCursor(0, 0);
-  M5.Lcd.printf("Is this event before or after the first event you picked:");
-  M5.Lcd.setCursor(0, 50);
-  M5.Lcd.printf("%s", question);
+  M5.Lcd.printf("Please scan an event from your timeline that is close to the one you just selected...");
+}
+
+void notClose(){
+  M5.Lcd.fillScreen(BLACK);
+  M5.Lcd.setCursor(0, 0);
+  M5.Lcd.printf("That event is not close enough. Return the new event to the group pile and try a different one. Press the middle button to continue.");
 }
 
 void displayEvent(const char* question){
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setCursor(0, 0);
   M5.Lcd.printf("%s", question);
+  M5.Lcd.setCursor(0, 200);
+  M5.Lcd.printf("Press the middle button when ready to continue...");
 }
 
 void displayCorrect(){

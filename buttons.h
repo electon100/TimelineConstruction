@@ -40,3 +40,22 @@ void waitOnButton(char button){
     while (!finished) finished = buttonC();
   }
 }
+
+bool mustPressButton(char button){
+  bool correct = false;
+  if (button == 'a' || button == 'A'){
+    correct = buttonA();
+  }
+  else if (button == 'b' || button == 'B'){
+    correct = buttonB();
+  }
+  else if (button == 'c' || button == 'C'){
+    correct = buttonC();
+  }
+  return correct;
+}
+
+bool anyButton(){
+  buttonA();
+  return true;
+}
