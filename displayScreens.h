@@ -1,7 +1,20 @@
 void initialDisplay(){
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setCursor(0, 0);
-  M5.Lcd.printf("Add the first event to your timeline by pressing the middle button...");
+  M5.Lcd.printf("Add the first event to your timeline by scanning it...");
+}
+
+void invalidEvent(){
+  M5.Lcd.fillScreen(BLACK);
+  M5.Lcd.setCursor(0, 0);
+  M5.Lcd.printf("Event does not exist");
+  delay(3000);
+}
+
+void nextEvent(){
+  M5.Lcd.fillScreen(BLACK);
+  M5.Lcd.setCursor(0, 0);
+  M5.Lcd.printf("Scan your next event...");
 }
 
 void askNearbyEvent(){

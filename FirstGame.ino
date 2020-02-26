@@ -1,10 +1,22 @@
 #include <M5Stack.h>
+#include "SoftwareSerial.h"
 #include "displayScreens.h" 
 #include "buttons.h"
 #include "eventList.h"
 
 // Number of events required to win
 #define WINNUM 10
+
+SoftwareSerial rfid(3, 1); // RX, TX
+
+char* allowedTags[] = {
+  "4300F9AA1F",
+  "0000000000",
+  "0000000000",
+  "0000000000"
+};
+
+char tagValue[10];
 
 // Code that can be removed at a later date
 // ------------------------------------------
@@ -26,17 +38,37 @@ int deviceID = 0;
 EventList eventList = EventList(WINNUM);
 int loopCount = 0;
 
-int waitForEvent(){
-  bool received = false;
-  while (!received){
-    // Get event from RFID reader
-    // TODO change to RFID reader
-    waitOnButton('b');
-    return 0;
+int tagInEvents(char tagValue[]){
+  for (int i = 0; i < EVENTS; i++){
+    if (strcmp(allowedTags[i], tagValue) == 0){
+      return i;
+    }
   }
+  return -1;
+}
+
+int waitForEvent(){
+  Serial.println("Waiting for event");
+  char val = 0;
+  int readCount = 0;
+  while (readCount < 16){
+    if (rfid.available() > 0){
+      val = rfid.read();
+      if (0 < readCount && readCount < 11){
+        tagValue[readCount-1] = val;
+      }
+      readCount++;
+    }
+  }
+  
+  Serial.println("Got event:");
+  Serial.println(tagValue);
+
+  return tagInEvents(tagValue);
 }
 
 int gameEnded(){
+  Serial.println("Checking if game has ended");
   // Check if master device has 10 events
   if (eventList.getSize() == WINNUM) return deviceID;
   // TODO Check if slave device has 10 events
@@ -47,11 +79,13 @@ int gameEnded(){
 }
 
 void endGame(int winner){
+  Serial.println("Game has ended");
   //TODO display winner and loser screens correctly
   return;
 }
 
 void alertMaster(){
+  Serial.println("Sending information to master");
   //TODO send master device the number of events in list
   return;
 }
@@ -73,22 +107,35 @@ void setup() {
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setTextSize(2);
 
+  Serial.begin(9600);
+  rfid.begin(9600);
+
   // TODO start menu here
 }
 
 void loop() {
   // If it's the first loop
   if (loopCount == 0){
+    Serial.println("First time loop");
+    
     // Ask user to scan first event
     initialDisplay();
     int event = waitForEvent();
-    eventList.addEvent(event);
-    
-    // Display which event they chose
-    displayEvent(QUESTIONS[event]);
+    if (event > -1){
+      Serial.println("Valid event");
+      eventList.addEvent(event);
+      displayEvent(QUESTIONS[event]);
+    }
+    else{
+      Serial.println("Invalid event");
+      invalidEvent();
+    }
+
+    Serial.println("Waiting on button B press");
     waitOnButton('b');
   }
   else{
+    Serial.println("Normal loop");
     // Check if anyone has won the game, if they have, end the game (only do this if master device)
     if (deviceID == 0){
       int winner = gameEnded();
@@ -101,17 +148,25 @@ void loop() {
       alertMaster();
     }
 
+    nextEvent();
+    
     // Wait for new event
     int event = waitForEvent();
-    displayEvent(QUESTIONS[event]);
+    if (event > -1){
+      displayEvent(QUESTIONS[event]);
+    }
+    else M5.Lcd.printf("Event does not exist");
     waitOnButton('b');
 
     // When a new event is detected, ask the player to select an event closest to the new event
     askNearbyEvent();
     int nearbyEvent = waitForEvent();
-    int neighbours[2];
-    eventList.getNeighbours(event, neighbours);
-    bool valid = isNearby(nearbyEvent, neighbours);
+    bool valid = false;
+    if (nearbyEvent > -1){
+      int neighbours[2];
+      eventList.getNeighbours(event, neighbours);
+      valid = isNearby(nearbyEvent, neighbours);
+    }
 
     if (valid){
       // The user must then input whether the new event is before or after the chosen close event
