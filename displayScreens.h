@@ -54,3 +54,21 @@ void displayIncorrect(){
   delay(3000);
   M5.Lcd.setTextColor(WHITE);
 }
+
+void winScreen(){
+  M5.Lcd.fillScreen(GREEN);
+  M5.Lcd.setTextColor(BLACK);
+  M5.Lcd.setCursor(115, 110);
+  M5.Lcd.printf("YOU WIN!");
+  delay(3000);
+  M5.Lcd.setTextColor(WHITE);
+}
+
+void loseScreen(){
+  M5.Lcd.fillScreen(RED);
+  M5.Lcd.setTextColor(BLACK);
+  M5.Lcd.setCursor(115, 110);
+  M5.Lcd.printf("YOU LOSE!");
+  delay(3000);
+  M5.Lcd.setTextColor(WHITE);
+}

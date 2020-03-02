@@ -1,8 +1,8 @@
 #include <M5Stack.h>
-#include "SoftwareSerial.h"
 #include "displayScreens.h" 
 #include "buttons.h"
 #include "eventList.h"
+#include "comm.h"
 
 // Number of events required to win
 #define WINNUM 10
@@ -71,23 +71,35 @@ int gameEnded(){
   Serial.println("Checking if game has ended");
   // Check if master device has 10 events
   if (eventList.getSize() == WINNUM) return deviceID;
-  // TODO Check if slave device has 10 events
-  int slaveSize = 0;
+  // Check if slave device has 10 events
+  Serial.println("Waiting for slave response");
+  String slaveAnswer = "";
+  slaveAnswer = serialReadStr();
+  int slaveSize = slaveAnswer.toInt();
+  Serial.println(slaveAnswer);
   if (slaveSize == WINNUM) return 1;
   // -1 return indicates game has not ended
   return -1;
 }
 
 void endGame(int winner){
-  Serial.println("Game has ended");
-  //TODO display winner and loser screens correctly
-  return;
+  if (winner == deviceID){
+    winScreen();
+    serialWriteStr("lose");
+  }
+  else {
+    loseScreen();
+    serialWriteStr("win");
+  }
+  delay(20000);
 }
 
-void alertMaster(){
+String alertMaster(){
   Serial.println("Sending information to master");
   //TODO send master device the number of events in list
-  return;
+  serialWriteStr(String(eventList.getSize()));
+  String ending = serialReadStr();
+  return ending;
 }
 
 bool isNearby(int event, int neighbours[]){
@@ -109,7 +121,7 @@ void setup() {
 
   Serial.begin(9600);
   rfid.begin(9600);
-
+  stack.begin(57600);
   // TODO start menu here
 }
 
@@ -145,7 +157,9 @@ void loop() {
     }
     // Tell the master device the current size of the event list (only do this if slave device)
     else if (deviceID == 1){
-      alertMaster();
+      String ending = alertMaster();
+      if (ending == "win") winScreen();
+      else if (ending == "lose") loseScreen();
     }
 
     nextEvent();
