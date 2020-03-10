@@ -50,7 +50,7 @@ void displayWait(){
 void displayEvent(const char* question){
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setCursor(0, 0);
-  M5.Lcd.printf("%s", question);
+  M5.Lcd.print(question);
   M5.Lcd.setCursor(0, 200);
   M5.Lcd.printf("Press the middle button when ready to continue...");
 }
@@ -60,6 +60,8 @@ void displayCorrect(){
   M5.Lcd.setTextColor(BLACK);
   M5.Lcd.setCursor(115, 110);
   M5.Lcd.printf("CORRECT!");
+  M5.Lcd.setCursor(0, 150);
+  M5.Lcd.printf("Add the event to your timeline!");
   delay(3000);
   M5.Lcd.setTextColor(WHITE);
 }
@@ -69,6 +71,8 @@ void displayIncorrect(){
   M5.Lcd.setTextColor(BLACK);
   M5.Lcd.setCursor(105, 110);
   M5.Lcd.printf("INCORRECT!");
+  M5.Lcd.setCursor(0, 150);
+  M5.Lcd.printf("Put the event back in the middle!");
   delay(3000);
   M5.Lcd.setTextColor(WHITE);
 }

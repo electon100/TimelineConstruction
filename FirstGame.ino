@@ -11,44 +11,46 @@
 
 SoftwareSerial rfid(3, 1); // RX, TX
 
-char* allowedTags[] = {
-  "0600B48BC4",
-  "0600B3E375",
-  "0600B498C4",
-  "0600B3BAC2",
-  "0600B40130",
-  "0600B4485B",
-  "0600B63DBB",
-  "0600B3C469",
-  "0600B4C521",
-  "0600B3CC6D"
-};
-
-char tagValue[10];
-
-// Code that can be removed at a later date
-// ------------------------------------------
-// TODO this needs to be the number of lines in the read in text file
-const int EVENTS = 4;
-
-char* question1 = "In this year, Charles I became the second Stuart King, after the death of his father James I";
-char* question2 = "Soon after his coronation as king, Parliament prevented Charles I from collecting Tonnage and Poundage for more than one year";
-char* question3 = "Charles I needed money before he could fight with France and Spain, so he used a Forced Loan to raise money from the nobility";
-char* question4 = "Five members of the nobility took the king to court over their imprisonment for refusing to pay the Forced Loan, but the king won";
-
-const char* QUESTIONS[EVENTS] = {question1, question2, question3, question4};
-const int YEARS[EVENTS] = {1625, 1626, 1627, 1627};
-// ------------------------------------------
-
 // Id of the device, 0 = MASTER, 1 = SLAVE
 int deviceID = 0;
 // Keeps track of the events the player has
 EventList eventList = EventList(WINNUM);
 int loopCount = 0;
 
-int tagInEvents(char tagValue[]){
+char tagValue[11];
+
+// Code that can be removed at a later date
+// ------------------------------------------
+// TODO this needs to be the number of lines in the read in text file
+const int EVENTS = 4;
+
+const char* question1 = "In this year, Charles I became the second Stuart King, after the death of his father James I";
+const char* question2 = "Soon after his coronation as king, Parliament prevented Charles I from collecting Tonnage and Poundage for more than one year";
+const char* question3 = "Charles I needed money before he could fight with France and Spain, so he used a Forced Loan to raise money from the nobility";
+const char* question4 = "Five members of the nobility took the king to court over their imprisonment for refusing to pay the Forced Loan, but the king won";
+
+const char* QUESTIONS[EVENTS] = {question1, question2, question3, question4};
+const int YEARS[EVENTS] = {1625, 1626, 1627, 1627};
+
+// ------------------------------------------
+
+const char* allowedTags[10] = {
+  "0600B48BC4\0",
+  "0600B3E375\0",
+  "0600B498C4\0",
+  "0600B3BAC2\0",
+  "0600B40130\0",
+  "0600B4485B\0",
+  "0600B63DBB\0",
+  "0600B3C469\0",
+  "0600B4C521\0",
+  "0600B3CC6D\0"
+};
+
+int tagInEvents(char tag[]){
+  tag[10] = '\0';
   for (int i = 0; i < EVENTS; i++){
-    if (strcmp(allowedTags[i], tagValue) == 0){
+    if (strncmp(allowedTags[i], tag, 10) == 0){
       return i;
     }
   }
@@ -174,9 +176,15 @@ void loop() {
     nextEvent();
     
     // Wait for new event
-    int event = waitForEvent();
+    int event = waitForEvent();    
     if (event > -1){
+      Serial.println("Before");
+      const char* question = QUESTIONS[event];
+      Serial.println("HERE");
+      Serial.println(question);
+      Serial.println("Middle");
       displayEvent(QUESTIONS[event]);
+      Serial.println("After");
     }
     else M5.Lcd.printf("Event does not exist");
     waitOnButton('b');
