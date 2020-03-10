@@ -4,16 +4,24 @@
 #include "eventList.h"
 #include "comm.h"
 
+// TODO Fix error when 2 then 0 is scanned and when 3 then 1 is scanned and when you scan before it says scan event
+
 // Number of events required to win
 #define WINNUM 10
 
 SoftwareSerial rfid(3, 1); // RX, TX
 
 char* allowedTags[] = {
-  "4300F9AA1F",
-  "0000000000",
-  "0000000000",
-  "0000000000"
+  "0600B48BC4",
+  "0600B3E375",
+  "0600B498C4",
+  "0600B3BAC2",
+  "0600B40130",
+  "0600B4485B",
+  "0600B63DBB",
+  "0600B3C469",
+  "0600B4C521",
+  "0600B3CC6D"
 };
 
 char tagValue[10];
@@ -96,7 +104,7 @@ void endGame(int winner){
 
 String alertMaster(){
   Serial.println("Sending information to master");
-  //TODO send master device the number of events in list
+  // Send master device the number of events in list
   serialWriteStr(String(eventList.getSize()));
   String ending = serialReadStr();
   return ending;
@@ -148,6 +156,7 @@ void loop() {
   }
   else{
     Serial.println("Normal loop");
+    displayWait();
     // Check if anyone has won the game, if they have, end the game (only do this if master device)
     if (deviceID == 0){
       int winner = gameEnded();
@@ -179,11 +188,14 @@ void loop() {
     if (nearbyEvent > -1){
       int neighbours[2];
       eventList.getNeighbours(event, neighbours);
+      Serial.println(neighbours[0]);
+      Serial.println(neighbours[1]);
       valid = isNearby(nearbyEvent, neighbours);
     }
 
     if (valid){
       // The user must then input whether the new event is before or after the chosen close event
+      higherOrLower();
       char correctButton = buttonToPress(event, nearbyEvent);
       bool correct = false;
       if (correctButton == 'b') correct = anyButton();

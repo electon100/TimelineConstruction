@@ -29,6 +29,24 @@ void notClose(){
   M5.Lcd.printf("That event is not close enough. Return the new event to the group pile and try a different one. Press the middle button to continue.");
 }
 
+void higherOrLower(){
+  M5.Lcd.fillScreen(BLACK);
+  M5.Lcd.setCursor(0, 0);
+  M5.Lcd.printf("Is your new event before or after the event in your timeline?");
+  M5.Lcd.setCursor(0, 220);
+  M5.Lcd.printf("Before");
+  M5.Lcd.setCursor(135, 220);
+  M5.Lcd.printf("Same");
+  M5.Lcd.setCursor(260, 220);
+  M5.Lcd.printf("After");
+}
+
+void displayWait(){
+  M5.Lcd.fillScreen(BLACK);
+  M5.Lcd.setCursor(0, 0);
+  M5.Lcd.printf("Waiting for other player...");
+}
+
 void displayEvent(const char* question){
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setCursor(0, 0);
