@@ -8,33 +8,35 @@
 
 // Number of events required to win
 #define WINNUM 10
+#define deviceID 0
+#define EVENTS 10
 
-SoftwareSerial rfid(3, 1); // RX, TX
-
-// Id of the device, 0 = MASTER, 1 = SLAVE
-int deviceID = 0;
 // Keeps track of the events the player has
 EventList eventList = EventList(WINNUM);
-int loopCount = 0;
 
-char tagValue[11];
+SoftwareSerial rfid(3, 1); // RX, TX
 
 // Code that can be removed at a later date
 // ------------------------------------------
 // TODO this needs to be the number of lines in the read in text file
-const int EVENTS = 4;
 
-const char* question1 = "In this year, Charles I became the second Stuart King, after the death of his father James I";
-const char* question2 = "Soon after his coronation as king, Parliament prevented Charles I from collecting Tonnage and Poundage for more than one year";
-const char* question3 = "Charles I needed money before he could fight with France and Spain, so he used a Forced Loan to raise money from the nobility";
-const char* question4 = "Five members of the nobility took the king to court over their imprisonment for refusing to pay the Forced Loan, but the king won";
+const PROGMEM char* question1 = "In this year, Charles I became the second Stuart King, after the death of his father James I";
+const PROGMEM char* question2 = "Soon after his coronation as king, Parliament prevented Charles I from collecting Tonnage and Poundage for more than one year";
+const PROGMEM char* question3 = "Charles I needed money before he could fight with France and Spain, so he used a Forced Loan to raise money from the nobility";
+const PROGMEM char* question4 = "Five members of the nobility took the king to court over their imprisonment for refusing to pay the Forced Loan, but the king won";
+const PROGMEM char* question5 = "Parliament was dissolved after it tried to introduce measures against Tonnage and Poundage, starting the Personal Rule";
+const PROGMEM char* question6 = "Ship Money was introduced for inland towns to raise money during the Personal Rule";
+const PROGMEM char* question7 = "Book of Common Prayer was introduced in Scotland, causing riots that led to the First Bishops' War";
+const PROGMEM char* question8 = "The Short Parliament was called to raise money for the Second Bishop's War";
+const PROGMEM char* question9 = "The Grand Remonstrance was rejected by Charles during the Long Parliament, so called because it lasted longer than the Short Parliament";
+const PROGMEM char* question10 = "The English Civil Wars begin when Charles raises his standard in Nottingham";
 
-const char* QUESTIONS[EVENTS] = {question1, question2, question3, question4};
-const int YEARS[EVENTS] = {1625, 1626, 1627, 1627};
+const PROGMEM char* QUESTIONS[EVENTS] = {question1, question2, question3, question4, question5, question6, question7, question8, question9, question10};
+const PROGMEM int YEARS[EVENTS] = {1625, 1626, 1627, 1627, 1629, 1635, 1637, 1640, 1641, 1642};
 
 // ------------------------------------------
 
-const char* allowedTags[10] = {
+const PROGMEM char* allowedTags[10] = {
   "0600B48BC4\0",
   "0600B3E375\0",
   "0600B498C4\0",
@@ -47,6 +49,8 @@ const char* allowedTags[10] = {
   "0600B3CC6D\0"
 };
 
+int loopCount;
+
 int tagInEvents(char tag[]){
   tag[10] = '\0';
   for (int i = 0; i < EVENTS; i++){
@@ -58,8 +62,9 @@ int tagInEvents(char tag[]){
 }
 
 int waitForEvent(){
-  Serial.println("Waiting for event");
+  Serial.println(F("Waiting for event"));
   char val = 0;
+  char tagValue[11];
   int readCount = 0;
   while (readCount < 16){
     if (rfid.available() > 0){
@@ -71,18 +76,18 @@ int waitForEvent(){
     }
   }
   
-  Serial.println("Got event:");
+  Serial.println(F("Got event:"));
   Serial.println(tagValue);
 
   return tagInEvents(tagValue);
 }
 
 int gameEnded(){
-  Serial.println("Checking if game has ended");
+  Serial.println(F("Checking if game has ended"));
   // Check if master device has 10 events
   if (eventList.getSize() == WINNUM) return deviceID;
   // Check if slave device has 10 events
-  Serial.println("Waiting for slave response");
+  Serial.println(F("Waiting for slave response"));
   String slaveAnswer = "";
   slaveAnswer = serialReadStr();
   int slaveSize = slaveAnswer.toInt();
@@ -105,7 +110,7 @@ void endGame(int winner){
 }
 
 String alertMaster(){
-  Serial.println("Sending information to master");
+  Serial.println(F("Sending information to master"));
   // Send master device the number of events in list
   serialWriteStr(String(eventList.getSize()));
   String ending = serialReadStr();
@@ -132,32 +137,39 @@ void setup() {
   Serial.begin(9600);
   rfid.begin(9600);
   stack.begin(57600);
+
+  loopCount = 0;
   // TODO start menu here
 }
 
-void loop() {
+void loop() {  
+
+  Serial.println(F("DEBUGGING"));
+  eventList.showList();
+  Serial.println(F("END DEBUGGING"));
+  
   // If it's the first loop
   if (loopCount == 0){
-    Serial.println("First time loop");
+    Serial.println(F("First time loop"));
     
     // Ask user to scan first event
     initialDisplay();
     int event = waitForEvent();
     if (event > -1){
-      Serial.println("Valid event");
+      Serial.println(F("Valid event"));
       eventList.addEvent(event);
       displayEvent(QUESTIONS[event]);
     }
     else{
-      Serial.println("Invalid event");
+      Serial.println(F("Invalid event"));
       invalidEvent();
     }
 
-    Serial.println("Waiting on button B press");
+    Serial.println(F("Waiting on button B press"));
     waitOnButton('b');
   }
   else{
-    Serial.println("Normal loop");
+    Serial.println(F("Normal loop"));
     displayWait();
     // Check if anyone has won the game, if they have, end the game (only do this if master device)
     if (deviceID == 0){
@@ -178,13 +190,7 @@ void loop() {
     // Wait for new event
     int event = waitForEvent();    
     if (event > -1){
-      Serial.println("Before");
-      const char* question = QUESTIONS[event];
-      Serial.println("HERE");
-      Serial.println(question);
-      Serial.println("Middle");
       displayEvent(QUESTIONS[event]);
-      Serial.println("After");
     }
     else M5.Lcd.printf("Event does not exist");
     waitOnButton('b');
@@ -196,6 +202,11 @@ void loop() {
     if (nearbyEvent > -1){
       int neighbours[2];
       eventList.getNeighbours(event, neighbours);
+      Serial.println(F("Event:"));
+      Serial.println(event);
+      Serial.println(F("Nearby event:"));
+      Serial.println(nearbyEvent);
+      Serial.println(F("Neighbours:"));
       Serial.println(neighbours[0]);
       Serial.println(neighbours[1]);
       valid = isNearby(nearbyEvent, neighbours);
@@ -232,7 +243,7 @@ void loop() {
     // With a random probability, choose a new order for the list (only do this if master device)
     //    Wait for all events in the list to be scanned through in the new order
     //    Events that are scanned through wrong now change and are no longer part of the event list
-    // Receieve whether master device has decided to reorder the list (only do this if slave device)
+    // Receive whether master device has decided to reorder the list (only do this if slave device)
     //    Wait for all events in the list to be scanned through in the new order
     //    Events that are scanned through wrong now change and are no longer part of the event list
   }

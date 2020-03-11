@@ -6,10 +6,12 @@ class EventList
 {
   public:
     EventList(int listSize);
+    void initEvents(int len);
     bool addEvent(int event);
     bool removeEvent(int event);
     int getSize();
     void getNeighbours(int event, int neighbours[]);
+    void showList();
   private:
     int currentPos;
     int maxSize;
@@ -19,6 +21,12 @@ class EventList
 EventList::EventList(int listSize){
   currentPos = 0;
   maxSize = listSize;
+}
+
+void EventList::initEvents(int len){
+  for (int i = 0; i < len; i++){
+    events[i] = 0;
+  }
 }
 
 // Adds an event into the right place in the array to keep order
@@ -31,8 +39,6 @@ bool EventList::addEvent(int event){
     for (int i = currentPos; i > pos; i--){
       events[i] = events[i-1];
     }
-    Serial.println("Placing event at:");
-    Serial.println(pos);
     events[pos] = event;
     currentPos++;
     return true;
@@ -63,22 +69,31 @@ int EventList::getSize(){
 void EventList::getNeighbours(int event, int neighbours[]){
   if (currentPos == 1){
     neighbours[0] = events[0];
-    neighbours[1] = events[1];
+    neighbours[1] = events[0];
   }
   else{
     for (int i = 0; i < currentPos; i++){
       if (event < events[i] && i == 0){
         neighbours[0] = events[i];
         neighbours[1] = events[i];
+        break;
       }
       else if (i == currentPos - 1 && event > events[i]){
         neighbours[0] = events[i];
         neighbours[1] = events[i];
+        break;
       }
       else if (event < events[i]){
         neighbours[0] = events[i-1];
         neighbours[1] = events[i];
+        break;
       }
     }
+  }
+}
+
+void EventList::showList(){
+  for (int i = 0; i < maxSize; i++){
+    Serial.println(events[i]);
   }
 }
