@@ -2,12 +2,13 @@
 #include "displayScreens.h" 
 #include "buttons.h"
 #include "eventList.h"
-#include "comm.h"
+//#include "comm.h"
+#include "SoftwareSerial.h"
 
 // TODO Fix error when 2 then 0 is scanned and when 3 then 1 is scanned and when you scan before it says scan event
 
 // Number of events required to win
-#define WINNUM 10
+#define WINNUM 5
 #define deviceID 0
 #define EVENTS 10
 
@@ -15,6 +16,7 @@
 EventList eventList = EventList(WINNUM);
 
 SoftwareSerial rfid(3, 1); // RX, TX
+SoftwareSerial stack(2, 5); // RX, TX
 
 // Code that can be removed at a later date
 // ------------------------------------------
@@ -51,6 +53,31 @@ const PROGMEM char* allowedTags[10] = {
 
 int loopCount;
 
+String serialReadStr() {
+  String buf = "";
+    while (true)
+    {
+      if (stack.available() > 0)
+      {
+          char chr = (char)stack.read();
+          if (chr == '\n'){
+              break;
+          } 
+          else
+          {
+              buf += chr;
+          }
+      }
+    }
+
+    return buf;
+}
+
+void serialWriteStr(String str) {
+  stack.print(str);
+  stack.print('\n');
+}
+
 int tagInEvents(char tag[]){
   tag[10] = '\0';
   for (int i = 0; i < EVENTS; i++){
@@ -86,27 +113,30 @@ int gameEnded(){
   Serial.println(F("Checking if game has ended"));
   // Check if master device has 10 events
   if (eventList.getSize() == WINNUM) return deviceID;
-  // Check if slave device has 10 events
+  
+  // Check if slave device has enough events
   Serial.println(F("Waiting for slave response"));
-  String slaveAnswer = "";
-  slaveAnswer = serialReadStr();
+  String slaveAnswer = serialReadStr();
   int slaveSize = slaveAnswer.toInt();
   Serial.println(slaveAnswer);
   if (slaveSize == WINNUM) return 1;
+  
   // -1 return indicates game has not ended
   return -1;
 }
 
 void endGame(int winner){
-  if (winner == deviceID){
+  if (winner == -1) serialWriteStr("noone");
+  else if (winner == deviceID){
     winScreen();
     serialWriteStr("lose");
+    delay(20000);
   }
   else {
     loseScreen();
     serialWriteStr("win");
+    delay(20000);
   }
-  delay(20000);
 }
 
 String alertMaster(){
@@ -142,12 +172,7 @@ void setup() {
   // TODO start menu here
 }
 
-void loop() {  
-
-  Serial.println(F("DEBUGGING"));
-  eventList.showList();
-  Serial.println(F("END DEBUGGING"));
-  
+void loop() {    
   // If it's the first loop
   if (loopCount == 0){
     Serial.println(F("First time loop"));
@@ -174,9 +199,7 @@ void loop() {
     // Check if anyone has won the game, if they have, end the game (only do this if master device)
     if (deviceID == 0){
       int winner = gameEnded();
-      if (winner > -1){
-        endGame(winner);
-      }
+      endGame(winner);
     }
     // Tell the master device the current size of the event list (only do this if slave device)
     else if (deviceID == 1){
