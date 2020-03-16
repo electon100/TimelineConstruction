@@ -12,6 +12,7 @@ class EventList
     int getSize();
     void getNeighbours(int event, int neighbours[]);
     void showList();
+    bool itemInList(int event);
   private:
     int currentPos;
     int maxSize;
@@ -96,4 +97,11 @@ void EventList::showList(){
   for (int i = 0; i < maxSize; i++){
     Serial.println(events[i]);
   }
+}
+
+bool EventList::itemInList(int event){
+  for (int i = 0; i < currentPos; i++){
+    if (event == events[i]) return true;
+  }
+  return false;
 }

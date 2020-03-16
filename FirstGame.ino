@@ -9,7 +9,7 @@
 
 // Number of events required to win
 #define WINNUM 5
-#define deviceID 0
+#define deviceID 1
 #define EVENTS 10
 
 // Keeps track of the events the player has
@@ -22,19 +22,20 @@ SoftwareSerial stack(2, 5); // RX, TX
 // ------------------------------------------
 // TODO this needs to be the number of lines in the read in text file
 
-const PROGMEM char* question1 = "In this year, Charles I became the second Stuart King, after the death of his father James I";
-const PROGMEM char* question2 = "Soon after his coronation as king, Parliament prevented Charles I from collecting Tonnage and Poundage for more than one year";
-const PROGMEM char* question3 = "Charles I needed money before he could fight with France and Spain, so he used a Forced Loan to raise money from the nobility";
-const PROGMEM char* question4 = "Five members of the nobility took the king to court over their imprisonment for refusing to pay the Forced Loan, but the king won";
-const PROGMEM char* question5 = "Parliament was dissolved after it tried to introduce measures against Tonnage and Poundage, starting the Personal Rule";
+const PROGMEM char* question1 = "In this year, Charles I\nbecame the second Stuart\nKing, after the death of\nhis father James I";
+const PROGMEM char* question2 = "Soon after his coronation as king, Parliament\nprevented Charles I from\ncollecting Tonnage and\nPoundage for more than oneyear";
+const PROGMEM char* question3 = "Charles I needed money\nbefore he could fight withFrance and Spain, so he\nused a Forced Loan to\nraise money from the\nnobility";
+const PROGMEM char* question4 = "Five members of the\nnobility took the king to court over their imprison-ment for refusing to pay\nthe Forced Loan, but the\nking won";
+const PROGMEM char* question5 = "Parliament was dissolved\nafter it tried to intro-\nduce measures against\nTonnage and Poundage,\nstarting the Personal Rule";
 const PROGMEM char* question6 = "Ship Money was introduced for inland towns to raise money during the Personal Rule";
-const PROGMEM char* question7 = "Book of Common Prayer was introduced in Scotland, causing riots that led to the First Bishops' War";
-const PROGMEM char* question8 = "The Short Parliament was called to raise money for the Second Bishop's War";
-const PROGMEM char* question9 = "The Grand Remonstrance was rejected by Charles during the Long Parliament, so called because it lasted longer than the Short Parliament";
-const PROGMEM char* question10 = "The English Civil Wars begin when Charles raises his standard in Nottingham";
+const PROGMEM char* question7 = "The New Book of Common\nPrayer was introduced in\nScotland, causing riots\nthat led to the First\nBishops' War";
+const PROGMEM char* question8 = "The Short Parliament was\ncalled to raise money for the Second Bishops' War,\nending the Personal Rule";
+const PROGMEM char* question9 = "The Grand Remonstrance wasrejected by Charles duringthe Long Parliament, so\ncalled because it lasted\nlonger than the Short\nParliament";
+const PROGMEM char* question10 = "The English Civil Wars\nbegan when Charles raised his standard in Nottingham";
 
 const PROGMEM char* QUESTIONS[EVENTS] = {question1, question2, question3, question4, question5, question6, question7, question8, question9, question10};
 const PROGMEM int YEARS[EVENTS] = {1625, 1626, 1627, 1627, 1629, 1635, 1637, 1640, 1641, 1642};
+const PROGMEM bool PERSONALRULE[EVENTS] = {false, false, false, false, true, true, true, true, false, false};
 
 // ------------------------------------------
 
@@ -53,6 +54,7 @@ const PROGMEM char* allowedTags[10] = {
 
 int loopCount;
 
+// Reads a string from the serial input from the other device
 String serialReadStr() {
   String buf = "";
     while (true)
@@ -73,11 +75,13 @@ String serialReadStr() {
     return buf;
 }
 
+// Writes a string to the serial output to the other device
 void serialWriteStr(String str) {
   stack.print(str);
   stack.print('\n');
 }
 
+// If a given tag is in the list of allowedTags, returns its index, otherwise returns -1
 int tagInEvents(char tag[]){
   tag[10] = '\0';
   for (int i = 0; i < EVENTS; i++){
@@ -88,6 +92,7 @@ int tagInEvents(char tag[]){
   return -1;
 }
 
+// Waits for a tag to be scanned and then returns the index of the tag in allowedTags
 int waitForEvent(){
   Serial.println(F("Waiting for event"));
   char val = 0;
@@ -109,6 +114,7 @@ int waitForEvent(){
   return tagInEvents(tagValue);
 }
 
+// Checks if the game has ended and returns which device won if that is the case
 int gameEnded(){
   Serial.println(F("Checking if game has ended"));
   // Check if master device has 10 events
@@ -125,6 +131,7 @@ int gameEnded(){
   return -1;
 }
 
+// Sends the slave the winner of the game and displays the correct end screen
 void endGame(int winner){
   if (winner == -1) serialWriteStr("noone");
   else if (winner == deviceID){
@@ -139,6 +146,7 @@ void endGame(int winner){
   }
 }
 
+// Tells the master how many events are in the slave's timeline
 String alertMaster(){
   Serial.println(F("Sending information to master"));
   // Send master device the number of events in list
@@ -147,16 +155,42 @@ String alertMaster(){
   return ending;
 }
 
+// Checks if the event from the timeline is a neighbour of the new event
 bool isNearby(int event, int neighbours[]){
   if (event == neighbours[0] || event == neighbours[1]) return true;
   else if (YEARS[event] == YEARS[neighbours[0]] || YEARS[event] == YEARS[neighbours[1]]) return true;
   else return false;
 }
 
+// Calculates the correct button to press based on the event from the timeline that was scanned
 char buttonToPress(int event, int nearbyEvent){
   if (YEARS[event] < YEARS[nearbyEvent]) return 'a';
   else if (YEARS[event] > YEARS[nearbyEvent]) return 'c';
   else if (YEARS[event] == YEARS[nearbyEvent]) return 'b';
+  return 'b';
+}
+
+// Runs the Personal Rule scanning minigame
+void personalRule(){
+  int numToScan = 0;
+  for (int i = 0; i < EVENTS; i++){
+    if (PERSONALRULE[i] && eventList.itemInList(i)) numToScan++;
+  }
+
+  if (numToScan == 0) noEvents();
+  else{
+    while (numToScan > 0){
+      scanEvents(numToScan);
+      int event = waitForEvent();
+      if (PERSONALRULE[event] && eventList.itemInList(event)) numToScan--;
+      else if (eventList.itemInList(event)){
+        eventList.removeEvent(event);
+        removingEvent();
+        waitOnButton('b');
+      }
+    }
+  }
+  displayWait();
 }
 
 void setup() {
@@ -168,11 +202,14 @@ void setup() {
   rfid.begin(9600);
   stack.begin(57600);
 
+  randomSeed(analogRead(0));
+
   loopCount = 0;
   // TODO start menu here
 }
 
 void loop() {    
+  eventList.showList();
   // If it's the first loop
   if (loopCount == 0){
     Serial.println(F("First time loop"));
@@ -193,6 +230,8 @@ void loop() {
     Serial.println(F("Waiting on button B press"));
     waitOnButton('b');
   }
+
+  // If it's a normal loop
   else{
     Serial.println(F("Normal loop"));
     displayWait();
@@ -211,7 +250,8 @@ void loop() {
     nextEvent();
     
     // Wait for new event
-    int event = waitForEvent();    
+    int event = waitForEvent();
+    while (eventList.itemInList(event)) event = waitForEvent();    
     if (event > -1){
       displayEvent(QUESTIONS[event]);
     }
@@ -221,14 +261,11 @@ void loop() {
     // When a new event is detected, ask the player to select an event closest to the new event
     askNearbyEvent();
     int nearbyEvent = waitForEvent();
+    while (!eventList.itemInList(nearbyEvent)) nearbyEvent = waitForEvent();
     bool valid = false;
     if (nearbyEvent > -1){
       int neighbours[2];
       eventList.getNeighbours(event, neighbours);
-      Serial.println(F("Event:"));
-      Serial.println(event);
-      Serial.println(F("Nearby event:"));
-      Serial.println(nearbyEvent);
       Serial.println(F("Neighbours:"));
       Serial.println(neighbours[0]);
       Serial.println(neighbours[1]);
@@ -262,7 +299,36 @@ void loop() {
       notClose();
       waitOnButton('b');
     }
-    
+
+    if (deviceID == 0){
+//      int reorder = random(0, 5);
+      int reorder = 0;
+      serialWriteStr(String(reorder));
+      switch (reorder) {
+        case 0:   
+          personalRule();
+          break;
+        case 1:
+          Serial.println("ONE");
+          break;
+        default:
+          Serial.println("No reorder");
+          break;
+      }
+      serialReadStr();
+    }
+    else if (deviceID == 1){
+      int minigame = serialReadStr().toInt();
+      switch (minigame) {
+        case 0:
+          personalRule();
+          break;
+        default:
+          Serial.println("No reorder");
+          break;
+      }
+      serialWriteStr("finished");
+    }
     // With a random probability, choose a new order for the list (only do this if master device)
     //    Wait for all events in the list to be scanned through in the new order
     //    Events that are scanned through wrong now change and are no longer part of the event list
