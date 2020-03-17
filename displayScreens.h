@@ -89,10 +89,20 @@ void noEvents(){
   M5.Lcd.printf("You have no events from\nthe personal rule. Waitingon your opponent to scan\ntheir events...");
 }
 
-void scanEvents(int numToScan){
+void scanEvents(int numToScan, int reorder){
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setCursor(0, 0);
-  M5.Lcd.printf("Scan all events from your timeline relating to the\nPersonal Rule. You have %i events left...", numToScan);
+  switch (reorder){
+    case 0:
+      M5.Lcd.printf("Scan all events from your timeline relating to the\nPersonal Rule. You have %i events left...", numToScan);
+      break;
+    case 1:
+      M5.Lcd.printf("Scan all events from your timeline relating to\nfinance. You have %i eventsleft...", numToScan);
+      break;
+    default:
+      M5.Lcd.printf("Scan all events from your timeline relating to the\nPersonal Rule. You have %i events left...", numToScan);
+      break;
+  }
 }
 
 void removingEvent(){

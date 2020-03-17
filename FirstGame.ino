@@ -36,6 +36,7 @@ const PROGMEM char* question10 = "The English Civil Wars\nbegan when Charles rai
 const PROGMEM char* QUESTIONS[EVENTS] = {question1, question2, question3, question4, question5, question6, question7, question8, question9, question10};
 const PROGMEM int YEARS[EVENTS] = {1625, 1626, 1627, 1627, 1629, 1635, 1637, 1640, 1641, 1642};
 const PROGMEM bool PERSONALRULE[EVENTS] = {false, false, false, false, true, true, true, true, false, false};
+const PROGMEM bool FINANCE[EVENTS] = {false, true, true, true, true, true, false, true, false, false};
 
 // ------------------------------------------
 
@@ -171,18 +172,18 @@ char buttonToPress(int event, int nearbyEvent){
 }
 
 // Runs the Personal Rule scanning minigame
-void personalRule(){
+void reorderList(const bool list[EVENTS], int reorder){
   int numToScan = 0;
   for (int i = 0; i < EVENTS; i++){
-    if (PERSONALRULE[i] && eventList.itemInList(i)) numToScan++;
+    if (list[i] && eventList.itemInList(i)) numToScan++;
   }
 
   if (numToScan == 0) noEvents();
   else{
     while (numToScan > 0){
-      scanEvents(numToScan);
+      scanEvents(numToScan, reorder);
       int event = waitForEvent();
-      if (PERSONALRULE[event] && eventList.itemInList(event)) numToScan--;
+      if (list[event] && eventList.itemInList(event)) numToScan--;
       else if (eventList.itemInList(event)){
         eventList.removeEvent(event);
         removingEvent();
@@ -301,15 +302,15 @@ void loop() {
     }
 
     if (deviceID == 0){
-//      int reorder = random(0, 5);
-      int reorder = 0;
+//      int reorder = random(0, 3);
+      int reorder = 1;
       serialWriteStr(String(reorder));
       switch (reorder) {
         case 0:   
-          personalRule();
+          reorderList(PERSONALRULE, reorder);
           break;
         case 1:
-          Serial.println("ONE");
+          reorderList(FINANCE, reorder);
           break;
         default:
           Serial.println("No reorder");
@@ -321,8 +322,10 @@ void loop() {
       int minigame = serialReadStr().toInt();
       switch (minigame) {
         case 0:
-          personalRule();
+          reorderList(PERSONALRULE, minigame);
           break;
+        case 1:
+          reorderList(FINANCE, minigame);
         default:
           Serial.println("No reorder");
           break;
