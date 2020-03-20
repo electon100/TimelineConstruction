@@ -32,7 +32,7 @@ void EventList::initEvents(int len){
 
 // Adds an event into the right place in the array to keep order
 bool EventList::addEvent(int event){
-  if (currentPos < maxSize-1){
+  if (currentPos < maxSize){
     int pos = 0;
     while (event > events[pos] && pos < currentPos){
       pos++;

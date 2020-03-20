@@ -8,8 +8,8 @@
 // TODO Fix error when 2 then 0 is scanned and when 3 then 1 is scanned and when you scan before it says scan event
 
 // Number of events required to win
-#define WINNUM 5
-#define deviceID 1
+#define WINNUM 10
+#define deviceID 0
 #define EVENTS 10
 
 // Keeps track of the events the player has
@@ -119,14 +119,15 @@ int waitForEvent(){
 int gameEnded(){
   Serial.println(F("Checking if game has ended"));
   // Check if master device has 10 events
+  Serial.println(eventList.getSize());
   if (eventList.getSize() == WINNUM) return deviceID;
   
   // Check if slave device has enough events
-  Serial.println(F("Waiting for slave response"));
-  String slaveAnswer = serialReadStr();
-  int slaveSize = slaveAnswer.toInt();
-  Serial.println(slaveAnswer);
-  if (slaveSize == WINNUM) return 1;
+//  Serial.println(F("Waiting for slave response"));
+//  String slaveAnswer = serialReadStr();
+//  int slaveSize = slaveAnswer.toInt();
+//  Serial.println(slaveAnswer);
+//  if (slaveSize == WINNUM) return 1;
   
   // -1 return indicates game has not ended
   return -1;
@@ -186,7 +187,7 @@ void reorderList(const bool list[EVENTS], int reorder){
       if (list[event] && eventList.itemInList(event)) numToScan--;
       else if (eventList.itemInList(event)){
         eventList.removeEvent(event);
-        removingEvent();
+        removingEvent(reorder);
         waitOnButton('b');
       }
     }
@@ -302,8 +303,8 @@ void loop() {
     }
 
     if (deviceID == 0){
-//      int reorder = random(0, 3);
-      int reorder = 1;
+      int reorder = random(0, 4);
+//      int reorder = 1;
       serialWriteStr(String(reorder));
       switch (reorder) {
         case 0:   
@@ -316,7 +317,7 @@ void loop() {
           Serial.println("No reorder");
           break;
       }
-      serialReadStr();
+//      serialReadStr();
     }
     else if (deviceID == 1){
       int minigame = serialReadStr().toInt();

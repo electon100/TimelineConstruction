@@ -105,12 +105,24 @@ void scanEvents(int numToScan, int reorder){
   }
 }
 
-void removingEvent(){
-  M5.Lcd.fillScreen(BLACK);
+void removingEvent(int reorder){
+  M5.Lcd.fillScreen(RED);
+  M5.Lcd.setTextColor(BLACK);
   M5.Lcd.setCursor(0, 0);
-  M5.Lcd.printf("That event is not part of the Personal Rule. It has been removed from your\ntimeline. Please return itto the group pile.");
+  switch (reorder){
+    case 0:
+      M5.Lcd.printf("That event is not part of the Personal Rule. It has been removed from your\ntimeline. Please return itto the group pile.");
+      break;
+    case 1:
+      M5.Lcd.printf("That event is not related to finance. It has been\nremoved from your time-\nline. Please return it to the group pile.");
+      break;
+    default:
+      M5.Lcd.printf("That event is not part of the Personal Rule. It has been removed from your\ntimeline. Please return itto the group pile.");
+      break;
+  }
   M5.Lcd.setCursor(0, 200);
   M5.Lcd.printf("Press the middle button\nwhen ready to continue...");
+  M5.Lcd.setTextColor(WHITE);
 }
 
 void winScreen(){
