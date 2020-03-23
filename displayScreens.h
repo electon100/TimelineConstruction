@@ -83,10 +83,23 @@ void displayIncorrect(){
   M5.Lcd.setTextColor(WHITE);
 }
 
-void noEvents(){
+void noEvents(int reorder){
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setCursor(0, 0);
-  M5.Lcd.printf("You have no events from\nthe personal rule. Waitingon your opponent to scan\ntheir events...");
+  switch (reorder){
+    case 0:
+      M5.Lcd.printf("You have no events from\nthe Personal Rule. Waitingon your opponent to scan\ntheir events...");
+      break;
+    case 1:
+      M5.Lcd.printf("You have no events relating to finance. Waiting on your opponent to scan their events...");
+      break;
+    case 2:
+      M5.Lcd.printf("You have no events relating to war. Waiting on your opponent to scan their events...");
+      break;
+    default:
+      M5.Lcd.printf("You have no events from\nthe Personal Rule. Waitingon your opponent to scan\ntheir events...");
+      break;
+  }
 }
 
 void scanEvents(int numToScan, int reorder){
@@ -98,6 +111,9 @@ void scanEvents(int numToScan, int reorder){
       break;
     case 1:
       M5.Lcd.printf("Scan all events from your timeline relating to\nfinance. You have %i eventsleft...", numToScan);
+      break;
+    case 2:
+      M5.Lcd.printf("Scan all events from your timeline relating to war. You have %i events left...", numToScan);
       break;
     default:
       M5.Lcd.printf("Scan all events from your timeline relating to the\nPersonal Rule. You have %i events left...", numToScan);
@@ -115,6 +131,9 @@ void removingEvent(int reorder){
       break;
     case 1:
       M5.Lcd.printf("That event is not related to finance. It has been\nremoved from your time-\nline. Please return it to the group pile.");
+      break;
+    case 2:
+      M5.Lcd.printf("That event is not related to war. It has been re-\nmoved from your timeline. Please return it to the\ngroup pile.");
       break;
     default:
       M5.Lcd.printf("That event is not part of the Personal Rule. It has been removed from your\ntimeline. Please return itto the group pile.");

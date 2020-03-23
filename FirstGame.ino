@@ -2,7 +2,6 @@
 #include "displayScreens.h" 
 #include "buttons.h"
 #include "eventList.h"
-//#include "comm.h"
 #include "SoftwareSerial.h"
 
 // TODO Fix error when 2 then 0 is scanned and when 3 then 1 is scanned and when you scan before it says scan event
@@ -37,6 +36,7 @@ const PROGMEM char* QUESTIONS[EVENTS] = {question1, question2, question3, questi
 const PROGMEM int YEARS[EVENTS] = {1625, 1626, 1627, 1627, 1629, 1635, 1637, 1640, 1641, 1642};
 const PROGMEM bool PERSONALRULE[EVENTS] = {false, false, false, false, true, true, true, true, false, false};
 const PROGMEM bool FINANCE[EVENTS] = {false, true, true, true, true, true, false, true, false, false};
+const PROGMEM bool WAR[EVENTS] = {false, false, true, false, false, false, true, true, false, true};
 
 // ------------------------------------------
 
@@ -179,7 +179,7 @@ void reorderList(const bool list[EVENTS], int reorder){
     if (list[i] && eventList.itemInList(i)) numToScan++;
   }
 
-  if (numToScan == 0) noEvents();
+  if (numToScan == 0) noEvents(reorder);
   else{
     while (numToScan > 0){
       scanEvents(numToScan, reorder);
@@ -303,8 +303,8 @@ void loop() {
     }
 
     if (deviceID == 0){
-      int reorder = random(0, 4);
-//      int reorder = 1;
+//      int reorder = random(0, 5);
+      int reorder = 2;
       serialWriteStr(String(reorder));
       switch (reorder) {
         case 0:   
@@ -312,6 +312,9 @@ void loop() {
           break;
         case 1:
           reorderList(FINANCE, reorder);
+          break;
+        case 2:
+          reorderList(WAR, reorder);
           break;
         default:
           Serial.println("No reorder");
@@ -327,6 +330,10 @@ void loop() {
           break;
         case 1:
           reorderList(FINANCE, minigame);
+          break;
+        case 2:
+          reorderList(WAR, minigame);
+          break;
         default:
           Serial.println("No reorder");
           break;
