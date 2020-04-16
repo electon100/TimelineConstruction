@@ -21,22 +21,62 @@ SoftwareSerial stack(2, 5); // RX, TX
 // ------------------------------------------
 // TODO this needs to be the number of lines in the read in text file
 
-const PROGMEM char* question1 = "In this year, Charles I\nbecame the second Stuart\nKing, after the death of\nhis father James I";
-const PROGMEM char* question2 = "Soon after his coronation as king, Parliament\nprevented Charles I from\ncollecting Tonnage and\nPoundage for more than oneyear";
-const PROGMEM char* question3 = "Charles I needed money\nbefore he could fight withFrance and Spain, so he\nused a Forced Loan to\nraise money from the\nnobility";
-const PROGMEM char* question4 = "Five members of the\nnobility took the king to court over their imprison-ment for refusing to pay\nthe Forced Loan, but the\nking won";
-const PROGMEM char* question5 = "Parliament was dissolved\nafter it tried to intro-\nduce measures against\nTonnage and Poundage,\nstarting the Personal Rule";
-const PROGMEM char* question6 = "Ship Money was introduced for inland towns to raise money during the Personal Rule";
-const PROGMEM char* question7 = "The New Book of Common\nPrayer was introduced in\nScotland, causing riots\nthat led to the First\nBishops' War";
-const PROGMEM char* question8 = "The Short Parliament was\ncalled to raise money for the Second Bishops' War,\nending the Personal Rule";
-const PROGMEM char* question9 = "The Grand Remonstrance wasrejected by Charles duringthe Long Parliament, so\ncalled because it lasted\nlonger than the Short\nParliament";
-const PROGMEM char* question10 = "The English Civil Wars\nbegan when Charles raised his standard in Nottingham";
+const PROGMEM char* question1a = "King John signs the Magna Carta, protecting barons from illegal imprisonment and laying the foundations of the unwritten British constitution.";
+const PROGMEM char* question1b = "The Provisions of Oxford sets up a Council of 24 members which the monarch should govern through, reasserting a provision made in the Magna Carta.";
+const PROGMEM char* question1c = "After defeating King Henry III (King John’s son), Simon de Montfort calls a parliament of representatives from across the country, widely regarded as the start of the House of Commons.";
+const PROGMEM char* question1d = "One of the first restrictions on voting rights was the introduction of a required minimum annual income of 40 shillings and also the introduction of the first-past-the-post voting system.";
+const PROGMEM char* question1e = "The Act of Supremacy grants Henry VIII and his heirs Royal Supremacy (making their laws supreme to those of the church) and makes them the Supreme Head of the Church of England.";
+const PROGMEM char* question1f = "Soon after the Act of Supremacy, the Law in Wales Acts combined the administrative systems of Wales and England, effectively making them one country.";
+const PROGMEM char* question1g = "King James VI of Scotland inherits the English throne as King James I, joining the monarchies of the two countries for the first time, though they retained separate parliaments for over a century. ";
+const PROGMEM char* question1h = "During the reign of James I, the Case of Prohibitions is the first case to decide on the royal prerogative powers of the monarch, starting a centuries long process of controlling royal prerogative.";
+const PROGMEM char* question1i = "The Petition of Right, which used Magna Carta as its basis, prevents the monarch from imprisoning citizens without cause, along with setting out other liberties which can’t be infringed.";
+const PROGMEM char* question1j = "The English Civil War and the other Wars of the Three Kingdoms cause a great shift in power, with King Charles I being executed and parliament increasing its power.";
+const PROGMEM char* question1k = "Further to the Petition of Right, the Habeas Corpus Act prevented unlawful or arbitrary imprisonment and was signed during the reign of Charles II, Charles I’s eldest son.";
+const PROGMEM char* question1l = "The Bill of Rights is signed into law, setting out the primacy of Parliament and requiring regular free elections for Parliament following the removal of King James II during the Glorious Revolution.";
+const PROGMEM char* question1m = "The Bank of England and Bank of Scotland were created as central banks for the two kingdoms, with the Bank of England becoming the main central bank when the kingdoms were united. ";
+const PROGMEM char* question1n = "The Act of Settlement, following on from the Bill of Rights, limits the succession of the crown to Protestants only and established judicial independence.";
+const PROGMEM char* question1o = "The Acts of Union formally unite the parliaments of Scotland and England into the Parliament of Great Britain.";
+const PROGMEM char* question1p = "Robert Walpole starts leading the government during the reign of George I and is considered the first prime minister, though not an official title.";
+const PROGMEM char* question1q = "Further Acts of Union merged the kingdoms of Great Britain and Ireland, making Ireland the last of the kingdoms in the British Isles to join United Kingdom of Great Britain and Ireland.";
+const PROGMEM char* question1r = "In the early 19th century, the Great Reform Act was the first act to grant voting rights to a significant number of property owning males. This was later extended by multiple Representation of the People Acts.";
+const PROGMEM char* question1s = "Towards the end of the 19th century, the first of the Representation of the People Acts gives voting rights to roughly a third of the male population at the time.";
+const PROGMEM char* question1t = "Henry Campbell-Bannerman is the first person to officially hold the title of prime minister.";
+const PROGMEM char* question1u = "The first of the Parliament Acts is enacted to limit the powers of the House of Lords, preventing them from vetoing most bills and allowing them to delay bills for a short time.";
+const PROGMEM char* question1v = "At the end of World War One, the second Representation of the People Act provides universal suffrage for men over 21 and women over 30, removing most property qualifications.";
+const PROGMEM char* question1w = "Between the first and second world wars, the Irish Free State broke away from the United Kingdom of Great Britain and Ireland.";
+const PROGMEM char* question1x = "Ten years after the Representation of the People Act, women are given the right to vote on the same grounds as men.";
+const PROGMEM char* question1y = "The second of the Parliament Acts reduces the amount of time the House of Lords can delay bills for.";
+const PROGMEM char* question1z = "Under Conservative prime minister Edward Heath, the European Communities Act passes, joining the UK with the European Economic Community (EEC), which later became the European Union (EU).";
+const PROGMEM char* question1aa = "There are no formal rules on ministerial duties, but the Ministerial Code was introduced by the Major and Blair governments to provide guidelines."; 
+const PROGMEM char* question1ab = "The Blair government enacted the Human Rights Act to guarantee in the UK the same rights as those granted by the European Convention on Human Rights, allowing cases to be decided in the UK.";
+const PROGMEM char* question1ac = "One of the many changes made by the Blair government, the Devolution Acts provide executive and legislature branches for each of the home nations (excluding England).";
+const PROGMEM char* question1ad = "The House of Lords are reformed under the Blair government, reducing the number of hereditary peers from 700 to just 92, the rest of the lords would be appointed by the monarch on the suggestion of the prime minister.";
+const PROGMEM char* question1ae = "The Perth Agreement is signed by the Commonwealth realms and prime minister David Cameron, changing the succession of the British crown to absolute primogeniture (allowing older females to inherit before males).";
+const PROGMEM char* question1af = "During the Conservative-Liberal Democrat coalition government, the Fixed-term Parliament Acts prevents early general elections, unless by a vote of no confidence or two thirds majority in the House of Commons.";
+const PROGMEM char* question1ag = "The Brexit Referendum returns a result of 51.9% in favour of leaving, leading to the greatest constitutional change since the UK joined the EEC (later the EU).";
 
-const PROGMEM char* QUESTIONS[EVENTS] = {question1, question2, question3, question4, question5, question6, question7, question8, question9, question10};
-const PROGMEM int YEARS[EVENTS] = {1625, 1626, 1627, 1627, 1629, 1635, 1637, 1640, 1641, 1642};
-const PROGMEM bool PERSONALRULE[EVENTS] = {false, false, false, false, true, true, true, true, false, false};
-const PROGMEM bool FINANCE[EVENTS] = {false, true, true, true, true, true, false, true, false, false};
-const PROGMEM bool WAR[EVENTS] = {false, false, true, false, false, false, true, true, false, true};
+const PROGMEM char* question2a = "The Home Ownership and Equity Protection Act is voted. It gives the Fed the power to impose more stringent rules on mortgage lending. Greenspan refuses to use it, contributing to a rise in subprime mortgages that would lead to the CDO boom of the nextd decade";
+const PROGMEM char* question2b = "The Community Reinvestment Act seeks to reduce discrimination by banks of low-income borrowers and favour home ownership";
+const PROGMEM char* question2c = "More than 1/3 of S&L’s failed at the end of Reagan's presidency due to high risk concentration in mortgage lending"; 
+const PROGMEM char* question2d = "Invention of the credit default swap, an insurance contract on a CDO whereby the insurer receives a regular fee in exchange for covering losses from payment default. Seen as a risk-reducing method after the S&L crisis. Yet generated systemic risk by generating numerous bets on CDOs";
+const PROGMEM char* question2e = "In a method called quantitative easing, the Fed bought $1.5 trillion of MBS and bonds from the treasury and Fannie and Freddie in order to restore confidence in the markets";
+const PROGMEM char* question2f = "Wachovia is bought by Wells Fargo after losing 1% of its deposits in a silent run from its clients unnerved by the fall of Lehman";
+const PROGMEM char* question2g = "Lehman Brothers filed for bankruptcy after its MBS lost value. This caused a 4.5% drop in the Dow-Jones";
+const PROGMEM char* question2h = "Fannie May and Freddie Mac are created to favour homeownership following the CRA. To motivate mortgage investment, they create the MBS, a way to diversify and reduce risk from mortgages by pooling mortgages from different locations meaning they are less likely to fail at once.";
+const PROGMEM char* question2i = "CDOs are invented. They repackage MBS into tranches ranked by default risk. CDOs are used to mask risk from an MBS. ";
+const PROGMEM char* question2j = "The CDO market peaked at $1.5 trillion a year before the housing bubble popped, prompted by low Fed interest rates which led investors to seek high-yield  CDOs on mortgages. ";
+
+//const PROGMEM char* QUESTIONS[EVENTS] = {question1a, question1e, question1f, question1g, question1h, question1j, question1k, question1l, question1n, question1ae};
+//const PROGMEM int YEARS[EVENTS] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+//const PROGMEM bool GROUP1[EVENTS] = {true, false, false, false, false, false, true, true, false, false};
+//const PROGMEM bool GROUP2[EVENTS] = {true, true, false, true, true, true, true, true, true, true};
+//const PROGMEM bool GROUP3[EVENTS] = {false, false, false, false, false, true, false, true, false, false};
+
+const PROGMEM char* QUESTIONS[EVENTS] = {question2h, question2b, question2c, question2i, question2d, question2a, question2j, question2f, question2g, question2e};
+const PROGMEM int YEARS[EVENTS] = {1, 2, 3, 4, 5, 6, 7, 8, 8, 9};
+const PROGMEM bool GROUP1[EVENTS] = {true, false, true, true, true, true, true, true, true, false};
+const PROGMEM bool GROUP2[EVENTS] = {true, true, true, true, true, true, true, false, true, true};
+const PROGMEM bool GROUP3[EVENTS] = {false, false, false, false, false, false, false, false, false, true};
 
 // ------------------------------------------
 
@@ -303,18 +343,17 @@ void loop() {
     }
 
     if (deviceID == 0){
-//      int reorder = random(0, 5);
-      int reorder = 2;
+      int reorder = random(0, 5);
       serialWriteStr(String(reorder));
       switch (reorder) {
         case 0:   
-          reorderList(PERSONALRULE, reorder);
+          reorderList(GROUP1, reorder);
           break;
         case 1:
-          reorderList(FINANCE, reorder);
+          reorderList(GROUP2, reorder);
           break;
         case 2:
-          reorderList(WAR, reorder);
+          reorderList(GROUP3, reorder);
           break;
         default:
           Serial.println("No reorder");
@@ -326,13 +365,13 @@ void loop() {
       int minigame = serialReadStr().toInt();
       switch (minigame) {
         case 0:
-          reorderList(PERSONALRULE, minigame);
+          reorderList(GROUP1, minigame);
           break;
         case 1:
-          reorderList(FINANCE, minigame);
+          reorderList(GROUP2, minigame);
           break;
         case 2:
-          reorderList(WAR, minigame);
+          reorderList(GROUP3, minigame);
           break;
         default:
           Serial.println("No reorder");
@@ -340,12 +379,6 @@ void loop() {
       }
       serialWriteStr("finished");
     }
-    // With a random probability, choose a new order for the list (only do this if master device)
-    //    Wait for all events in the list to be scanned through in the new order
-    //    Events that are scanned through wrong now change and are no longer part of the event list
-    // Receive whether master device has decided to reorder the list (only do this if slave device)
-    //    Wait for all events in the list to be scanned through in the new order
-    //    Events that are scanned through wrong now change and are no longer part of the event list
   }
   
   loopCount++;

@@ -88,13 +88,16 @@ void noEvents(int reorder){
   M5.Lcd.setCursor(0, 0);
   switch (reorder){
     case 0:
-      M5.Lcd.printf("You have no events from\nthe Personal Rule. Waitingon your opponent to scan\ntheir events...");
+//      M5.Lcd.printf("You have no events relating to citizen rights. Waiting on your opponent to scan their events...");
+      M5.Lcd.printf("You have no events relating to corporate responsibility. Waiting on your opponent to scan their events...");
       break;
     case 1:
-      M5.Lcd.printf("You have no events relating to finance. Waiting on your opponent to scan their events...");
+//      M5.Lcd.printf("You have no events relating to the monarchy. Waiting on your opponent to scan their events...");
+      M5.Lcd.printf("You have no events relating to government action. Waiting on your opponent to scan their events...");
       break;
     case 2:
-      M5.Lcd.printf("You have no events relating to war. Waiting on your opponent to scan their events...");
+//      M5.Lcd.printf("You have no events relating to parliamentary powers. Waiting on your opponent to scan their events...");
+      M5.Lcd.printf("You have no events relating to crisis aftermath. Waiting on your opponent to scan their events...");
       break;
     default:
       M5.Lcd.printf("You have no events from\nthe Personal Rule. Waitingon your opponent to scan\ntheir events...");
@@ -107,13 +110,16 @@ void scanEvents(int numToScan, int reorder){
   M5.Lcd.setCursor(0, 0);
   switch (reorder){
     case 0:
-      M5.Lcd.printf("Scan all events from your timeline relating to the\nPersonal Rule. You have %i events left...", numToScan);
+//      M5.Lcd.printf("Scan all events from your timeline relating to citizen rights. You have %i events left...", numToScan);
+      M5.Lcd.printf("Scan all events from your timeline relating to corporate responsibility. You have %i events left...", numToScan);
       break;
     case 1:
-      M5.Lcd.printf("Scan all events from your timeline relating to\nfinance. You have %i eventsleft...", numToScan);
+//      M5.Lcd.printf("Scan all events from your timeline relating to the monarchy. You have %i eventsleft...", numToScan);
+      M5.Lcd.printf("Scan all events from your timeline relating to government action. You have %i events left...", numToScan);
       break;
     case 2:
-      M5.Lcd.printf("Scan all events from your timeline relating to war. You have %i events left...", numToScan);
+//      M5.Lcd.printf("Scan all events from your timeline relating to parliamentary powers. You have %i events left...", numToScan);
+      M5.Lcd.printf("Scan all events from your timeline relating to crisis aftermath. You have %i events left...", numToScan);
       break;
     default:
       M5.Lcd.printf("Scan all events from your timeline relating to the\nPersonal Rule. You have %i events left...", numToScan);
@@ -127,13 +133,16 @@ void removingEvent(int reorder){
   M5.Lcd.setCursor(0, 0);
   switch (reorder){
     case 0:
-      M5.Lcd.printf("That event is not part of the Personal Rule. It has been removed from your\ntimeline. Please return itto the group pile.");
+//      M5.Lcd.printf("That event is not related to citizen rights. It has been removed from your timeline. Please return it to the group pile.");
+      M5.Lcd.printf("That event is not related to corporate responsibility. It has been removed from your timeline. Please return it to the group pile.");
       break;
     case 1:
-      M5.Lcd.printf("That event is not related to finance. It has been\nremoved from your time-\nline. Please return it to the group pile.");
+//      M5.Lcd.printf("That event is not related to the monarchy. It has been removed from your timeline. Please return it to the group pile.");
+      M5.Lcd.printf("That event is not related to government action. It has been removed from your timeline. Please return it to the group pile.");
       break;
     case 2:
-      M5.Lcd.printf("That event is not related to war. It has been re-\nmoved from your timeline. Please return it to the\ngroup pile.");
+//      M5.Lcd.printf("That event is not related to parliamentary powers. It has been removed from your timeline. Please return it to the group pile.");
+      M5.Lcd.printf("That event is not related to crisis aftermath. It has been removed from your timeline. Please return it to the group pile.");
       break;
     default:
       M5.Lcd.printf("That event is not part of the Personal Rule. It has been removed from your\ntimeline. Please return itto the group pile.");
