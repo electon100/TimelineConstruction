@@ -42,7 +42,7 @@ const PROGMEM char* question1r = "In the early 19th century, the Great Reform Ac
 const PROGMEM char* question1s = "Towards the end of the 19th century, the first of the Representation of the People Acts gives voting rights to roughly a third of the male population at the time.";
 const PROGMEM char* question1t = "Henry Campbell-Bannerman is the first person to officially hold the title of prime minister.";
 const PROGMEM char* question1u = "The first of the Parliament Acts is enacted to limit the powers of the House of Lords, preventing them from vetoing most bills and allowing them to delay bills for a short time.";
-const PROGMEM char* question1v = "At the end of World War One, the second Representation of the People Act provides universal suffrage for men over 21 and women over 30, removing most property qualifications.";
+const PROGMEM char* question1v = "At the end of World War One, the second Representation of the People Act provides suffrage for men over 21 and women over 30, removing most property qualifications.";
 const PROGMEM char* question1w = "Between the first and second world wars, the Irish Free State broke away from the United Kingdom of Great Britain and Ireland.";
 const PROGMEM char* question1x = "Ten years after the Representation of the People Act, women are given the right to vote on the same grounds as men.";
 const PROGMEM char* question1y = "The second of the Parliament Acts reduces the amount of time the House of Lords can delay bills for.";
@@ -55,28 +55,28 @@ const PROGMEM char* question1ae = "The Perth Agreement is signed by the Commonwe
 const PROGMEM char* question1af = "During the Conservative-Liberal Democrat coalition government, the Fixed-term Parliament Acts prevents early general elections, unless by a vote of no confidence or two thirds majority in the House of Commons.";
 const PROGMEM char* question1ag = "The Brexit Referendum returns a result of 51.9% in favour of leaving, leading to the greatest constitutional change since the UK joined the EEC (later the EU).";
 
-const PROGMEM char* question2a = "The Home Ownership and Equity Protection Act is voted. It gives the Fed the power to impose more stringent rules on mortgage lending. Greenspan refuses to use it, contributing to a rise in subprime mortgages that would lead to the CDO boom of the nextd decade";
-const PROGMEM char* question2b = "The Community Reinvestment Act seeks to reduce discrimination by banks of low-income borrowers and favour home ownership";
-const PROGMEM char* question2c = "More than 1/3 of S&L’s failed at the end of Reagan's presidency due to high risk concentration in mortgage lending"; 
-const PROGMEM char* question2d = "Invention of the credit default swap, an insurance contract on a CDO whereby the insurer receives a regular fee in exchange for covering losses from payment default. Seen as a risk-reducing method after the S&L crisis. Yet generated systemic risk by generating numerous bets on CDOs";
-const PROGMEM char* question2e = "In a method called quantitative easing, the Fed bought $1.5 trillion of MBS and bonds from the treasury and Fannie and Freddie in order to restore confidence in the markets";
-const PROGMEM char* question2f = "Wachovia is bought by Wells Fargo after losing 1% of its deposits in a silent run from its clients unnerved by the fall of Lehman";
-const PROGMEM char* question2g = "Lehman Brothers filed for bankruptcy after its MBS lost value. This caused a 4.5% drop in the Dow-Jones";
-const PROGMEM char* question2h = "Fannie May and Freddie Mac are created to favour homeownership following the CRA. To motivate mortgage investment, they create the MBS, a way to diversify and reduce risk from mortgages by pooling mortgages from different locations meaning they are less likely to fail at once.";
-const PROGMEM char* question2i = "CDOs are invented. They repackage MBS into tranches ranked by default risk. CDOs are used to mask risk from an MBS. ";
-const PROGMEM char* question2j = "The CDO market peaked at $1.5 trillion a year before the housing bubble popped, prompted by low Fed interest rates which led investors to seek high-yield  CDOs on mortgages. ";
+const PROGMEM char* question2a = "Even before Lehman's failure, a run on the UK bank Northern Rock ocurred, spurred by the announcement that the Bank had applied for a loan from the UK government, after experiencing liquidity shortages due to the drop in value of its MBS. The bank was then nationlised.";
+const PROGMEM char* question2b = "The same year Lehman fails, Wachovia is bought by Wells Fargo after losing 1% of its deposits in a silent run";
+const PROGMEM char* question2c = "The year of Obama's election, Lehman Borthers declares bankruptcy, caused by heavy involvement in subprime mortgages and excessive dependence on borrowing to buy these mortgages."; 
+const PROGMEM char* question2d = "The year of Lehman's failure, and as an early consequence of the crisis, Fannie May and Freddie Mac, the largest mortgage providers in the USA, are nationalised. They were on the brink of bankruptcy due to the housing market failure and their involvement in subprime lending.";
+const PROGMEM char* question2e = "After Fannie and Freddie are nationalised, the Troubled Assets Relief Program is announced, which is used to bail out AIG, Bank of America and others, as well as facilitate interbank lending. The last bank bailouts in the US occur a year after Lehman's failure.";
+const PROGMEM char* question2f = "At the peak of the US crisis, the year Obma moved into office, unemployment reaches 10%, or double its pre-crisis level. The American Reinvestment Act is successful in returning unemployment to normal levels in the USA. By 2016, unemployment was below its precrisis level";
+const PROGMEM char* question2g = "The Greek sovereign debt crisis begns a couple of years after Lehman's failure. The government is unable to bail out its national banks, leading it to demand a loan from the Internatioal Monetary Fund (IMF)";
+const PROGMEM char* question2h = "The Volcker rule of the Dodd-Frank Act prohibits investment banks from dealing in securities on their own account. Critics have argued that, although speculative trading generates risk, hedging, another form of securities trading, reduces it.";
+const PROGMEM char* question2i = "Shortly after the onset fo the Greek crisis, unemployment in the EU hit 12%, with Greece and Spain above 25%. In 2019, unemployment in the Euroezone was still above its pre-crisis level";
+const PROGMEM char* question2j = "Several years into the Eurozone crisis, andseeing that the financial crisis is ongoing in Europe, the European Central Bank (ECB) finally resorts to quantitative easing, a set of unconventional policies to ease interbank and private lending";
 
-//const PROGMEM char* QUESTIONS[EVENTS] = {question1a, question1e, question1f, question1g, question1h, question1j, question1k, question1l, question1n, question1ae};
+//const PROGMEM char* QUESTIONS[EVENTS] = {question1b, question1c, question1e, question1f, question1g, question1h, question1k, question1j, question1p, question1t};
 //const PROGMEM int YEARS[EVENTS] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-//const PROGMEM bool GROUP1[EVENTS] = {true, false, false, false, false, false, true, true, false, false};
-//const PROGMEM bool GROUP2[EVENTS] = {true, true, false, true, true, true, true, true, true, true};
-//const PROGMEM bool GROUP3[EVENTS] = {false, false, false, false, false, true, false, true, false, false};
+//const PROGMEM bool GROUP1[EVENTS] = {false, false, false, false, false, false, true, false, false, false};
+//const PROGMEM bool GROUP2[EVENTS] = {true, true, true, false, true, true, true, true, true, false};
+//const PROGMEM bool GROUP3[EVENTS] = {true, true, false, false, false, false, false, true, false, false};
 
-const PROGMEM char* QUESTIONS[EVENTS] = {question2h, question2b, question2c, question2i, question2d, question2a, question2j, question2f, question2g, question2e};
-const PROGMEM int YEARS[EVENTS] = {1, 2, 3, 4, 5, 6, 7, 8, 8, 9};
-const PROGMEM bool GROUP1[EVENTS] = {true, false, true, true, true, true, true, true, true, false};
-const PROGMEM bool GROUP2[EVENTS] = {true, true, true, true, true, true, true, false, true, true};
-const PROGMEM bool GROUP3[EVENTS] = {false, false, false, false, false, false, false, false, false, true};
+const PROGMEM char* QUESTIONS[EVENTS] = {question2a, question2b, question2c, question2d, question2e, question2f, question2g, question2h, question2i, question2j};
+const PROGMEM int YEARS[EVENTS] = {1, 2, 2, 2, 3, 3, 4, 4, 5, 6};
+const PROGMEM bool GROUP1[EVENTS] = {true, true, true, true, false, false, false, true, false, false};
+const PROGMEM bool GROUP2[EVENTS] = {true, false, false, true, true, false, true, true, false, true};
+const PROGMEM bool GROUP3[EVENTS] = {false, false, false, true, true, true, true, true, true, true};
 
 // ------------------------------------------
 
@@ -319,8 +319,7 @@ void loop() {
       higherOrLower();
       char correctButton = buttonToPress(event, nearbyEvent);
       bool correct = false;
-      if (correctButton == 'b') correct = anyButton();
-      else correct = mustPressButton(correctButton);
+      correct = mustPressButton(correctButton);
 
       // If correct, add event to events list
       if (correct){
